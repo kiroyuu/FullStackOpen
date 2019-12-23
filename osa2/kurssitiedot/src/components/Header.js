@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Header = (name) => {
+const Header = ({ course }) => {
     return (
         <div>
-            <h2>{name.course.name}</h2>
+            <h2>{course.name}</h2>
         </div>
     )
 }
