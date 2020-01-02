@@ -1,11 +1,28 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const cors = require('cors')
 
 app.use(bodyParser.json())
+const cors = require('cors')
 app.use(cors())
 
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(requestLogger)
+
+/* app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+     next();
+});
+ */
 const generateId = () => {
   const maxId = notes.length > 0
     ? Math.max(...notes.map(n => n.id))
@@ -54,6 +71,8 @@ let notes = [
     }
   ]
 
+  app.use(express.static('build'))
+
   app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
   })
@@ -80,7 +99,12 @@ let notes = [
       res.status(204).end()
   })
 
-const port = process.env.PORT || 3001
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+  const unknownEndpoint = (req, res) => {
+    res.status(404).send({ error: 'unknown endpoint' })
+  }
+  
+  app.use(unknownEndpoint)
+
+const PORT = process.env.PORT || 3001
+app.listen(PORT)
+console.log(`Server running on port ${PORT}`)

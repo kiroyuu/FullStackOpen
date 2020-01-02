@@ -5,6 +5,8 @@ const morgan = require('morgan')
 const app = express()
 
 app.use(bodyParser.json())
+const cors = require('cors')
+app.use(cors())
 
 const requestLogger = (req, res, next) => {
   console.log('Method:', req.method)
@@ -50,7 +52,8 @@ app.post('/api/persons', (request, response) => {
 
   const person = {
     name: body.name,
-    number: generateRanNum(),
+    /* number: generateRanNum(), */
+    number: body.number,
     id: generateId(),
   }
 
@@ -124,6 +127,7 @@ const unknowEndPoint = (req, res) => {
 
 app.use(unknowEndPoint)
 
-const port = 3001
-app.listen(port)
-console.log(`Server running on port ${port}`)
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
