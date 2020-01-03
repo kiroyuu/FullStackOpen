@@ -7,6 +7,7 @@ const app = express()
 app.use(bodyParser.json())
 const cors = require('cors')
 app.use(cors())
+app.use(express.static('build'))
 
 const requestLogger = (req, res, next) => {
   console.log('Method:', req.method)
