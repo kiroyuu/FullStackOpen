@@ -50,6 +50,18 @@ const App = () => {
               setErrorMessage(null)
             }, 5000)
         })
+        .catch(error => {
+          setErrorMessage(
+            error.response.data.error
+          )
+          //console.log(error.response.data)
+          setStyle(
+            "error"
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
     }
     else if (window.confirm(`${newName} has already been added to phonebook, replace the old number with a new one?`)) {
       const numObject = {
